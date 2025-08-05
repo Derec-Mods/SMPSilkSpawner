@@ -13,9 +13,7 @@ public class BlockPlaceListener implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (event.getBlock().getType() != Material.SPAWNER) {
-            return;
-        }
+        if (event.getBlock().getType() != Material.SPAWNER) return;
 
         World world = event.getBlock().getWorld();
         Location location = event.getBlock().getLocation();
