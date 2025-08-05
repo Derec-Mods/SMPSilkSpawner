@@ -3,8 +3,8 @@ plugins {
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
-group = 'io.github.derec4'
-version = '1.0.0.0'
+group = project.property('group')
+version = project.property('version')
 
 repositories {
     mavenCentral()
