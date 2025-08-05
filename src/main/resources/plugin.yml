@@ -1,0 +1,8 @@
+name: SMPSilkSpawner
+version: '1.0.0.0'
+main: io.github.derec4.sMPSilkSpawner.SMPSilkSpawner
+api-version: '1.18'
+prefix: DerexXD
+authors: [ DerexXD ]
+description: Balanced, configurable, vanilla friendly silk spawner plugin
+website: https://derec4.github.io/derexsmp/
