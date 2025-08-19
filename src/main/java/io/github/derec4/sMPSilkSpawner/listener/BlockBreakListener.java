@@ -8,9 +8,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -27,18 +27,27 @@ public class BlockBreakListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         final boolean isFakeEvent = !BlockBreakEvent.class.equals(event.getClass());
-        if (isFakeEvent) return;
+        if (isFakeEvent) {
+            return;
+        }
 
         Block block = event.getBlock();
 
         // Check if spawner
-        if (block.getType() != Material.SPAWNER) return;
-        if (!(block instanceof CreatureSpawner spawner)) return;
+        if (block.getType() != Material.SPAWNER) {
+            return;
+        }
+
+        if (!(block instanceof CreatureSpawner spawner)) {
+            return;
+        }
 
         Player player = event.getPlayer();
         ItemStack hand = player.getItemInUse();
 
-        if (!checkSilkTouch(hand)) return;
+        if (!checkSilkTouch(hand)) {
+            return;
+        }
 
         World world = block.getWorld();
         Location location = event.getBlock().getLocation();
