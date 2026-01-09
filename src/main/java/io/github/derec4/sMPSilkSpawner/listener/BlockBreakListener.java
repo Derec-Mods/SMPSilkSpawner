@@ -49,9 +49,13 @@ public class BlockBreakListener implements Listener {
             return;
         }
 
+        event.setDropItems(false);
+        event.setExpToDrop(0);
+
         World world = block.getWorld();
-        Location location = event.getBlock().getLocation();
+        Location location = block.getLocation();
         EntityType entityType = spawner.getSpawnedType();
+
         ItemStack spawnerItem = ItemUtils.newSpawnerItem(entityType, null, 1);
         world.dropItemNaturally(location, spawnerItem);
     }
