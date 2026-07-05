@@ -38,15 +38,17 @@ public class BlockBreakListener implements Listener {
             return;
         }
 
-        if (!(block instanceof CreatureSpawner spawner)) {
+        if (!(block.getState() instanceof CreatureSpawner spawner)) {
             return;
         }
 
         Player player = event.getPlayer();
-        ItemStack hand = player.getItemInUse();
-
-        if (!checkSilkTouch(hand)) {
-            return;
+        ItemStack tool = player.getInventory().getItemInMainHand();
+        if (!checkSilkTouch(tool)) {
+            tool = player.getInventory().getItemInOffHand();
+            if (!checkSilkTouch(tool)) {
+                return;
+            }
         }
 
         event.setDropItems(false);
