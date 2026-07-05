@@ -24,6 +24,10 @@ import static io.github.derec4.sMPSilkSpawner.util.ItemUtils.checkSilkTouch;
  * @author DerexXD
  */
 public class BlockBreakListener implements Listener {
+
+    // no magic numbers lol 
+    private static final double SPAWNER_DROP_CHANCE = 0.5;
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         final boolean isFakeEvent = !BlockBreakEvent.class.equals(event.getClass());
@@ -53,6 +57,10 @@ public class BlockBreakListener implements Listener {
 
         event.setDropItems(false);
         event.setExpToDrop(0);
+
+        if (Math.random() >= SPAWNER_DROP_CHANCE) {
+            return;
+        }
 
         World world = block.getWorld();
         Location location = block.getLocation();
