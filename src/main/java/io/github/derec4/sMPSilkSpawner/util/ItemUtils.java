@@ -1,5 +1,6 @@
 package io.github.derec4.sMPSilkSpawner.util;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.enchantments.Enchantment;
@@ -9,6 +10,7 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ItemUtils {
     public static boolean checkSilkTouch(ItemStack item) {
@@ -39,16 +41,30 @@ public class ItemUtils {
             meta.setBlockState(blockState);
         }
 
-        if (customName != null && !customName.isEmpty()) {
-            meta.setDisplayName(entityType.name() + " Spawner");
-        }
-
         List<String> lore = new ArrayList<>();
         if (entityType != null) {
-            lore.add("Stored Mob: " + entityType.name());
+            lore.add(ChatColor.RESET + "" + ChatColor.GOLD + formatMobName(entityType) + " Spawner");
         }
         meta.setLore(lore);
         spawner.setItemMeta(meta);
         return spawner;
+    }
+
+    private static String formatMobName(EntityType entityType) {
+        String[] parts = entityType.name().toLowerCase(Locale.ROOT).split("_");
+        StringBuilder name = new StringBuilder();
+        for (int i = 0; i < parts.length; i++) {
+            if (i > 0) {
+                name.append(' ');
+            }
+            String part = parts[i];
+            if (!part.isEmpty()) {
+                name.append(Character.toUpperCase(part.charAt(0)));
+                if (part.length() > 1) {
+                    name.append(part.substring(1));
+                }
+            }
+        }
+        return name.toString();
     }
 }
