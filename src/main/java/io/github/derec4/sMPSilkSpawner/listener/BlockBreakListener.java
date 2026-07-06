@@ -1,6 +1,7 @@
 package io.github.derec4.sMPSilkSpawner.listener;
 
 import io.github.derec4.sMPSilkSpawner.util.ItemUtils;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -47,6 +48,11 @@ public class BlockBreakListener implements Listener {
         }
 
         Player player = event.getPlayer();
+        GameMode gameMode = player.getGameMode();
+        if (gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE) {
+            return;
+        }
+
         ItemStack tool = player.getInventory().getItemInMainHand();
         if (!checkSilkTouch(tool)) {
             tool = player.getInventory().getItemInOffHand();
