@@ -1,5 +1,6 @@
 package io.github.derec4.sMPSilkSpawner.listener;
 
+import io.github.derec4.sMPSilkSpawner.util.ExplosionUtils;
 import io.github.derec4.sMPSilkSpawner.util.ItemUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -64,12 +65,14 @@ public class BlockBreakListener implements Listener {
         event.setDropItems(false);
         event.setExpToDrop(0);
 
+        World world = block.getWorld();
+        Location location = block.getLocation();
+        ExplosionUtils.playExplosion(world, location, ExplosionUtils.rollExplosionSize());
+
         if (Math.random() >= SPAWNER_DROP_CHANCE) {
             return;
         }
 
-        World world = block.getWorld();
-        Location location = block.getLocation();
         EntityType entityType = spawner.getSpawnedType();
 
         ItemStack spawnerItem = ItemUtils.newSpawnerItem(entityType, null, 1);
