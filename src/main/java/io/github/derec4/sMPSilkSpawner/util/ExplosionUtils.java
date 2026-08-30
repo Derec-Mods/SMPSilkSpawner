@@ -5,13 +5,13 @@ import org.bukkit.World;
 
 public final class ExplosionUtils {
 
-    private static final double CHANCE_SMALL = 0.70;
-    private static final double CHANCE_LARGE = 0.40;
-    private static final double CHANCE_MASSIVE = 0.10;
+    private static double chanceSmall = 0.70;
+    private static double chanceLarge = 0.40;
+    private static double chanceMassive = 0.10;
 
-    private static final float POWER_SMALL = 2.0f;
-    private static final float POWER_LARGE = 4.0f;
-    private static final float POWER_MASSIVE = 6.0f;
+    private static float powerSmall = 2.0f;
+    private static float powerLarge = 4.0f;
+    private static float powerMassive = 6.0f;
 
     public enum SpawnerExplosionSize {
         NONE,
@@ -23,15 +23,31 @@ public final class ExplosionUtils {
     private ExplosionUtils() {
     }
 
+    public static void setExplosionSettings(
+            double smallChance,
+            double largeChance,
+            double massiveChance,
+            float smallPower,
+            float largePower,
+            float massivePower
+    ) {
+        chanceSmall = smallChance;
+        chanceLarge = largeChance;
+        chanceMassive = massiveChance;
+        powerSmall = smallPower;
+        powerLarge = largePower;
+        powerMassive = massivePower;
+    }
+
     public static SpawnerExplosionSize rollExplosionSize() {
         double roll = Math.random();
-        if (roll < CHANCE_MASSIVE) {
+        if (roll < chanceMassive) {
             return SpawnerExplosionSize.MASSIVE;
         }
-        if (roll < CHANCE_LARGE) {
+        if (roll < chanceLarge) {
             return SpawnerExplosionSize.LARGE;
         }
-        if (roll < CHANCE_SMALL) {
+        if (roll < chanceSmall) {
             return SpawnerExplosionSize.SMALL;
         }
         return SpawnerExplosionSize.NONE;
@@ -44,9 +60,9 @@ public final class ExplosionUtils {
 
         Location center = blockLocation.clone().add(0.5, 0.5, 0.5);
         float power = switch (size) {
-            case SMALL -> POWER_SMALL;
-            case LARGE -> POWER_LARGE;
-            case MASSIVE -> POWER_MASSIVE;
+            case SMALL -> powerSmall;
+            case LARGE -> powerLarge;
+            case MASSIVE -> powerMassive;
             default -> 0.0f;
         };
 

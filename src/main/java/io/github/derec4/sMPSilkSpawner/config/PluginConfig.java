@@ -1,6 +1,7 @@
 package io.github.derec4.sMPSilkSpawner.config;
 
 import io.github.derec4.sMPSilkSpawner.listener.BlockBreakListener;
+import io.github.derec4.sMPSilkSpawner.util.ExplosionUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -46,31 +47,9 @@ public final class PluginConfig {
         powerLarge = clampPower(config.getDouble("break.explosions.power-large", DEFAULT_POWER_LARGE), DEFAULT_POWER_LARGE, plugin, "break.explosions.power-large");
         powerMassive = clampPower(config.getDouble("break.explosions.power-massive", DEFAULT_POWER_MASSIVE), DEFAULT_POWER_MASSIVE, plugin, "break.explosions.power-massive");
 
+        ExplosionUtils.setExplosionSettings(chanceSmall, chanceLarge, chanceMassive, powerSmall, powerLarge, powerMassive);
+
         plugin.getLogger().info("Loaded config.yml");
-    }
-
-    static double getChanceSmall() {
-        return chanceSmall;
-    }
-
-    static double getChanceLarge() {
-        return chanceLarge;
-    }
-
-    static double getChanceMassive() {
-        return chanceMassive;
-    }
-
-    static float getPowerSmall() {
-        return powerSmall;
-    }
-
-    static float getPowerLarge() {
-        return powerLarge;
-    }
-
-    static float getPowerMassive() {
-        return powerMassive;
     }
 
     private static double clampChance(double value, double fallback, JavaPlugin plugin, String path) {
