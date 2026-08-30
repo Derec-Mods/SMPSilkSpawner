@@ -1,5 +1,6 @@
 package io.github.derec4.sMPSilkSpawner.config;
 
+import io.github.derec4.sMPSilkSpawner.listener.BlockBreakListener;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -35,6 +36,7 @@ public final class PluginConfig {
         FileConfiguration config = plugin.getConfig();
 
         dropChance = clampChance(config.getDouble("break.drop-chance", DEFAULT_DROP_CHANCE), DEFAULT_DROP_CHANCE, plugin, "break.drop-chance");
+        BlockBreakListener.setSpawnerDropChance(dropChance);
 
         chanceSmall = clampChance(config.getDouble("break.explosions.chance-small", DEFAULT_CHANCE_SMALL), DEFAULT_CHANCE_SMALL, plugin, "break.explosions.chance-small");
         chanceLarge = clampChance(config.getDouble("break.explosions.chance-large", DEFAULT_CHANCE_LARGE), DEFAULT_CHANCE_LARGE, plugin, "break.explosions.chance-large");
@@ -45,10 +47,6 @@ public final class PluginConfig {
         powerMassive = clampPower(config.getDouble("break.explosions.power-massive", DEFAULT_POWER_MASSIVE), DEFAULT_POWER_MASSIVE, plugin, "break.explosions.power-massive");
 
         plugin.getLogger().info("Loaded config.yml");
-    }
-
-    static double getDropChance() {
-        return dropChance;
     }
 
     static double getChanceSmall() {
