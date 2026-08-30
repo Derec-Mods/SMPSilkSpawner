@@ -1,0 +1,16 @@
+# Silk Touch Spawner settings
+
+break:
+  # Chance (0.0 - 1.0) to drop the spawner when mined with silk touch
+  drop-chance: 0.5
+
+  explosions:
+    # Cumulative roll chances (0.0 - 1.0); checked massive -> large -> small
+    chance-small: 0.70
+    chance-large: 0.40
+    chance-massive: 0.10
+
+    # Explosion power per tier
+    power-small: 2.0
+    power-large: 4.0
+    power-massive: 6.0
