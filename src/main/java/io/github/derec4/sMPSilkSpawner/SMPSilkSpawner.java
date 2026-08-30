@@ -1,5 +1,6 @@
 package io.github.derec4.sMPSilkSpawner;
 
+import io.github.derec4.sMPSilkSpawner.config.PluginConfig;
 import io.github.derec4.sMPSilkSpawner.listener.BlockBreakListener;
 import io.github.derec4.sMPSilkSpawner.listener.BlockPlaceListener;
 import org.bukkit.Bukkit;
@@ -17,6 +18,7 @@ public final class SMPSilkSpawner extends JavaPlugin {
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "  | Derex |     SMP Silk Spawner v" + getDescription().getVersion());
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "  |_______|     Running on " + Bukkit.getName() + " - " + Bukkit.getVersion());
         Bukkit.getLogger().info("");
+        PluginConfig.load(this);
         // Register listeners
         getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
