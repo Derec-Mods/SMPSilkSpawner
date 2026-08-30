@@ -16,6 +16,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Map;
+
 import static io.github.derec4.sMPSilkSpawner.util.ItemUtils.checkSilkTouch;
 
 /**
@@ -28,9 +30,14 @@ import static io.github.derec4.sMPSilkSpawner.util.ItemUtils.checkSilkTouch;
 public class BlockBreakListener implements Listener {
 
     private static double spawnerDropChance = 0.5;
+    private static boolean dropAsItem = true;
 
     public static void setSpawnerDropChance(double dropChance) {
         spawnerDropChance = dropChance;
+    }
+
+    public static void setDropAsItem(boolean dropAsItem) {
+        BlockBreakListener.dropAsItem = dropAsItem;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -79,6 +86,13 @@ public class BlockBreakListener implements Listener {
         EntityType entityType = spawner.getSpawnedType();
 
         ItemStack spawnerItem = ItemUtils.newSpawnerItem(entityType, null, 1);
-        world.dropItemNaturally(location, spawnerItem);
+        if (dropAsItem) {
+            world.dropItemNaturally(location, spawnerItem);
+        } else {
+            Map<Integer, ItemStack> leftover = player.getInventory().addItem(spawnerItem);
+            for (ItemStack item : leftover.values()) {
+                world.dropItemNaturally(location, item);
+            }
+        }
     }
 }

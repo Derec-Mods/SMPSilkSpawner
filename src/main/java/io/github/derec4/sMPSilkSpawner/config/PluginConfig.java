@@ -18,6 +18,7 @@ public final class PluginConfig {
     private static final float DEFAULT_POWER_MASSIVE = 6.0f;
 
     private static double dropChance = DEFAULT_DROP_CHANCE;
+    private static boolean dropAsItem = true;
 
     private static double chanceSmall = DEFAULT_CHANCE_SMALL;
     private static double chanceLarge = DEFAULT_CHANCE_LARGE;
@@ -37,7 +38,9 @@ public final class PluginConfig {
         FileConfiguration config = plugin.getConfig();
 
         dropChance = clampChance(config.getDouble("break.drop-chance", DEFAULT_DROP_CHANCE), DEFAULT_DROP_CHANCE, plugin, "break.drop-chance");
+        dropAsItem = config.getBoolean("break.drop-as-item", true);
         BlockBreakListener.setSpawnerDropChance(dropChance);
+        BlockBreakListener.setDropAsItem(dropAsItem);
 
         chanceSmall = clampChance(config.getDouble("break.explosions.chance-small", DEFAULT_CHANCE_SMALL), DEFAULT_CHANCE_SMALL, plugin, "break.explosions.chance-small");
         chanceLarge = clampChance(config.getDouble("break.explosions.chance-large", DEFAULT_CHANCE_LARGE), DEFAULT_CHANCE_LARGE, plugin, "break.explosions.chance-large");
