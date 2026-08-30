@@ -5,7 +5,10 @@ break:
   drop-chance: 0.5
 
   explosions:
-    # Cumulative roll chances (0.0 - 1.0); checked massive -> large -> small
+    # This is how we pick an explosion when a spawner breaks:
+    # We roll a random number from 0 to 1. Check massive first, then large, then small.
+    # If the number is below the chance, that explosion happens. Otherwise try the next size down.
+    # With the defaults below, you get 10% massive, 30% large, 30% small, and 30% no explosion.
     chance-small: 0.70
     chance-large: 0.40
     chance-massive: 0.10
