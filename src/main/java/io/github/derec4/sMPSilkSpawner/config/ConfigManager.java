@@ -31,6 +31,7 @@ public final class ConfigManager {
 
     private static boolean requireAdjacent = true;
     private static boolean requireSameMob = true;
+    private static int maxCluster = -1;
 
     private ConfigManager() {
     }
@@ -58,7 +59,8 @@ public final class ConfigManager {
 
         requireAdjacent = config.getBoolean("place.require-adjacent", true);
         requireSameMob = config.getBoolean("place.require-same-mob", true);
-        BlockPlaceListener.setPlacementRules(requireAdjacent, requireSameMob);
+        maxCluster = clampMaxCluster(config.getInt("place.max-cluster", -1), plugin);
+        BlockPlaceListener.setPlacementRules(requireAdjacent, requireSameMob, maxCluster);
 
         plugin.getLogger().info("Loaded config.yml");
     }
@@ -67,6 +69,14 @@ public final class ConfigManager {
         if (value < 0.0 || value > 1.0) {
             plugin.getLogger().warning("Invalid " + path + " (" + value + "); using default " + fallback);
             return fallback;
+        }
+        return value;
+    }
+
+    private static int clampMaxCluster(int value, JavaPlugin plugin) {
+        if (value < -1) {
+            plugin.getLogger().warning("Invalid place.max-cluster (" + value + "); using default -1");
+            return -1;
         }
         return value;
     }

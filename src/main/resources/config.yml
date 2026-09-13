@@ -27,3 +27,5 @@ place:
   require-adjacent: true
   # If true, the placed spawner must match the mob type of the spawner it is placed against
   require-same-mob: true
+  # Max number of spawners in one connected group. -1 means no limit
+  max-cluster: -1
