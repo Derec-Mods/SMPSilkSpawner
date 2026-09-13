@@ -6,7 +6,7 @@ import io.github.derec4.sMPSilkSpawner.util.ExplosionUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class PluginConfig {
+public final class ConfigManager {
 
     private static final double DEFAULT_DROP_CHANCE = 0.5;
 
@@ -32,7 +32,7 @@ public final class PluginConfig {
     private static boolean requireAdjacent = true;
     private static boolean requireSameMob = true;
 
-    private PluginConfig() {
+    private ConfigManager() {
     }
 
     public static void load(JavaPlugin plugin) {
