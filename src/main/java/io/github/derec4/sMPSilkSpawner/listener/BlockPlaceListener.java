@@ -14,7 +14,9 @@ public class BlockPlaceListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (!(event.getBlock() instanceof CreatureSpawner attempted)) return;
+        if (!(event.getBlock().getState() instanceof CreatureSpawner attempted)) {
+            return;
+        }
 
         World world = event.getBlock().getWorld();
         Location location = event.getBlock().getLocation();
@@ -22,7 +24,7 @@ public class BlockPlaceListener implements Listener {
 
         // Can only place a spawner next to a spawner
         // Add configs to enable/disable this and config to check if same mob
-        if (!(against instanceof CreatureSpawner spawner)) {
+        if (!(against.getState() instanceof CreatureSpawner spawner)) {
             ParticleUtils.playFailedParticles(world, location);
             return;
         }
