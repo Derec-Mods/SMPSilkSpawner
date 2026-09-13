@@ -1,6 +1,7 @@
 package io.github.derec4.sMPSilkSpawner.config;
 
 import io.github.derec4.sMPSilkSpawner.listener.BlockBreakListener;
+import io.github.derec4.sMPSilkSpawner.listener.BlockPlaceListener;
 import io.github.derec4.sMPSilkSpawner.util.ExplosionUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,6 +29,9 @@ public final class PluginConfig {
     private static float powerLarge = DEFAULT_POWER_LARGE;
     private static float powerMassive = DEFAULT_POWER_MASSIVE;
 
+    private static boolean requireAdjacent = true;
+    private static boolean requireSameMob = true;
+
     private PluginConfig() {
     }
 
@@ -51,6 +55,10 @@ public final class PluginConfig {
         powerMassive = clampPower(config.getDouble("break.explosions.power-massive", DEFAULT_POWER_MASSIVE), DEFAULT_POWER_MASSIVE, plugin, "break.explosions.power-massive");
 
         ExplosionUtils.setExplosionSettings(chanceSmall, chanceLarge, chanceMassive, powerSmall, powerLarge, powerMassive);
+
+        requireAdjacent = config.getBoolean("place.require-adjacent", true);
+        requireSameMob = config.getBoolean("place.require-same-mob", true);
+        BlockPlaceListener.setPlacementRules(requireAdjacent, requireSameMob);
 
         plugin.getLogger().info("Loaded config.yml");
     }

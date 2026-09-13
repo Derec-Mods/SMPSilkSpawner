@@ -21,3 +21,9 @@ break:
     power-small: 2.0
     power-large: 4.0
     power-massive: 6.0
+
+place:
+  # If true, spawners can only be placed against another spawner
+  require-adjacent: true
+  # If true, the placed spawner must match the mob type of the spawner it is placed against
+  require-same-mob: true

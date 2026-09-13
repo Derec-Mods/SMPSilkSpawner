@@ -10,7 +10,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 public class BlockPlaceListener implements Listener {
-    // Event handling logic will go here
+
+    private static boolean requireAdjacent = true;
+    private static boolean requireSameMob = true;
+
+    public static void setPlacementRules(boolean requireAdjacent, boolean requireSameMob) {
+        BlockPlaceListener.requireAdjacent = requireAdjacent;
+        BlockPlaceListener.requireSameMob = requireSameMob;
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
@@ -18,19 +25,24 @@ public class BlockPlaceListener implements Listener {
             return;
         }
 
+        if (!requireAdjacent && !requireSameMob) {
+            return;
+        }
+
         World world = event.getBlock().getWorld();
         Location location = event.getBlock().getLocation();
         Block against = event.getBlockAgainst();
 
-        // Can only place a spawner next to a spawner
-        // Add configs to enable/disable this and config to check if same mob
         if (!(against.getState() instanceof CreatureSpawner spawner)) {
-            ParticleUtils.playFailedParticles(world, location);
+            if (requireAdjacent) {
+                event.setCancelled(true);
+                ParticleUtils.playFailedParticles(world, location);
+            }
             return;
         }
 
-        if (!spawner.getSpawnedType().equals(attempted.getSpawnedType())) {
-            // Add configs to enable/disable this and config to check if same mob
+        if (requireSameMob && !spawner.getSpawnedType().equals(attempted.getSpawnedType())) {
+            event.setCancelled(true);
             ParticleUtils.playFailedParticles(world, location);
             return;
         }
