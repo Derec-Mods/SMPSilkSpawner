@@ -1,11 +1,12 @@
 package io.github.derec4.sMPSilkSpawner.config;
 
 import io.github.derec4.sMPSilkSpawner.listener.BlockBreakListener;
+import io.github.derec4.sMPSilkSpawner.listener.BlockPlaceListener;
 import io.github.derec4.sMPSilkSpawner.util.ExplosionUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class PluginConfig {
+public final class ConfigManager {
 
     private static final double DEFAULT_DROP_CHANCE = 0.5;
 
@@ -28,7 +29,11 @@ public final class PluginConfig {
     private static float powerLarge = DEFAULT_POWER_LARGE;
     private static float powerMassive = DEFAULT_POWER_MASSIVE;
 
-    private PluginConfig() {
+    private static boolean requireAdjacent = true;
+    private static boolean requireSameMob = true;
+    private static int maxCluster = -1;
+
+    private ConfigManager() {
     }
 
     public static void load(JavaPlugin plugin) {
@@ -52,6 +57,11 @@ public final class PluginConfig {
 
         ExplosionUtils.setExplosionSettings(chanceSmall, chanceLarge, chanceMassive, powerSmall, powerLarge, powerMassive);
 
+        requireAdjacent = config.getBoolean("place.require-adjacent", true);
+        requireSameMob = config.getBoolean("place.require-same-mob", true);
+        maxCluster = clampMaxCluster(config.getInt("place.max-cluster", -1), plugin);
+        BlockPlaceListener.setPlacementRules(requireAdjacent, requireSameMob, maxCluster);
+
         plugin.getLogger().info("Loaded config.yml");
     }
 
@@ -59,6 +69,14 @@ public final class PluginConfig {
         if (value < 0.0 || value > 1.0) {
             plugin.getLogger().warning("Invalid " + path + " (" + value + "); using default " + fallback);
             return fallback;
+        }
+        return value;
+    }
+
+    private static int clampMaxCluster(int value, JavaPlugin plugin) {
+        if (value < -1) {
+            plugin.getLogger().warning("Invalid place.max-cluster (" + value + "); using default -1");
+            return -1;
         }
         return value;
     }
