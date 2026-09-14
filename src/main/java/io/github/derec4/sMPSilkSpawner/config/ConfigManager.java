@@ -18,12 +18,12 @@ public final class ConfigManager {
     private static final float DEFAULT_POWER_LARGE = 4.0f;
     private static final float DEFAULT_POWER_MASSIVE = 6.0f;
     private static final int DEFAULT_DURABILITY_DAMAGE = 100;
-    private static final double DEFAULT_PLAYER_DAMAGE = 0.0;
+    private static final double DEFAULT_PLAYER_DAMAGE_PERCENT = 50.0;
 
     private static double dropChance = DEFAULT_DROP_CHANCE;
     private static boolean dropAsItem = true;
     private static int durabilityDamage = DEFAULT_DURABILITY_DAMAGE;
-    private static double playerDamage = DEFAULT_PLAYER_DAMAGE;
+    private static double playerDamagePercent = DEFAULT_PLAYER_DAMAGE_PERCENT;
 
     private static double chanceSmall = DEFAULT_CHANCE_SMALL;
     private static double chanceLarge = DEFAULT_CHANCE_LARGE;
@@ -52,9 +52,9 @@ public final class ConfigManager {
         BlockBreakListener.setDropAsItem(dropAsItem);
 
         durabilityDamage = clampNonNegativeInt(config.getInt("break.durability-damage", DEFAULT_DURABILITY_DAMAGE), DEFAULT_DURABILITY_DAMAGE, plugin, "break.durability-damage");
-        playerDamage = clampNonNegativeDouble(config.getDouble("break.player-damage", DEFAULT_PLAYER_DAMAGE), DEFAULT_PLAYER_DAMAGE, plugin, "break.player-damage");
+        playerDamagePercent = clampPercent(config.getDouble("break.player-damage-percent", DEFAULT_PLAYER_DAMAGE_PERCENT), DEFAULT_PLAYER_DAMAGE_PERCENT, plugin, "break.player-damage-percent");
         BlockBreakListener.setDurabilityDamage(durabilityDamage);
-        BlockBreakListener.setPlayerDamage(playerDamage);
+        BlockBreakListener.setPlayerDamagePercent(playerDamagePercent);
 
         chanceSmall = clampChance(config.getDouble("break.explosions.chance-small", DEFAULT_CHANCE_SMALL), DEFAULT_CHANCE_SMALL, plugin, "break.explosions.chance-small");
         chanceLarge = clampChance(config.getDouble("break.explosions.chance-large", DEFAULT_CHANCE_LARGE), DEFAULT_CHANCE_LARGE, plugin, "break.explosions.chance-large");
@@ -90,8 +90,8 @@ public final class ConfigManager {
         return value;
     }
 
-    private static double clampNonNegativeDouble(double value, double fallback, JavaPlugin plugin, String path) {
-        if (value < 0.0 || Double.isNaN(value) || Double.isInfinite(value)) {
+    private static double clampPercent(double value, double fallback, JavaPlugin plugin, String path) {
+        if (value < 0.0 || value > 100.0 || Double.isNaN(value) || Double.isInfinite(value)) {
             plugin.getLogger().warning("Invalid " + path + " (" + value + "); using default " + fallback);
             return fallback;
         }

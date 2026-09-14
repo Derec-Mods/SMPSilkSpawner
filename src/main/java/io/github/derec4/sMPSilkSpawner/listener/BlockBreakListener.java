@@ -2,10 +2,13 @@ package io.github.derec4.sMPSilkSpawner.listener;
 
 import io.github.derec4.sMPSilkSpawner.util.ExplosionUtils;
 import io.github.derec4.sMPSilkSpawner.util.ItemUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
@@ -14,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -35,7 +39,7 @@ public class BlockBreakListener implements Listener {
     private static double spawnerDropChance = 0.5;
     private static boolean dropAsItem = true;
     private static int durabilityDamage = 100;
-    private static double playerDamage = 0.0;
+    private static double playerDamagePercent = 50.0;
 
     public static void setSpawnerDropChance(double dropChance) {
         spawnerDropChance = dropChance;
@@ -49,8 +53,8 @@ public class BlockBreakListener implements Listener {
         BlockBreakListener.durabilityDamage = durabilityDamage;
     }
 
-    public static void setPlayerDamage(double playerDamage) {
-        BlockBreakListener.playerDamage = playerDamage;
+    public static void setPlayerDamagePercent(double playerDamagePercent) {
+        BlockBreakListener.playerDamagePercent = playerDamagePercent;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -93,9 +97,7 @@ public class BlockBreakListener implements Listener {
         event.setExpToDrop(0);
 
         applyDurabilityDamage(tool);
-        if (playerDamage > 0.0) {
-            player.damage(playerDamage);
-        }
+        applyMagicPlayerDamage(player);
 
         World world = block.getWorld();
         Location location = block.getLocation();
@@ -136,5 +138,27 @@ public class BlockBreakListener implements Listener {
 
         damageable.setDamage(newDamage);
         tool.setItemMeta(damageable);
+    }
+
+    private static void applyMagicPlayerDamage(Player player) {
+        if (playerDamagePercent <= 0.0) {
+            return;
+        }
+
+        AttributeInstance maxHealthAttribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        double maxHealth = maxHealthAttribute != null ? maxHealthAttribute.getValue() : 20.0;
+        double amount = maxHealth * (playerDamagePercent / 100.0);
+        if (amount <= 0.0) {
+            return;
+        }
+
+        EntityDamageEvent damageEvent = new EntityDamageEvent(player, EntityDamageEvent.DamageCause.MAGIC, amount);
+        Bukkit.getPluginManager().callEvent(damageEvent);
+        if (damageEvent.isCancelled()) {
+            return;
+        }
+
+        player.setLastDamageCause(damageEvent);
+        player.setHealth(Math.max(0.0, player.getHealth() - damageEvent.getFinalDamage()));
     }
 }
