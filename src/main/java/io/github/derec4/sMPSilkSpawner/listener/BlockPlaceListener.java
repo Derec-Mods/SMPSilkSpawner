@@ -1,5 +1,6 @@
 package io.github.derec4.sMPSilkSpawner.listener;
 
+import io.github.derec4.sMPSilkSpawner.config.ConfigManager;
 import io.github.derec4.sMPSilkSpawner.util.ParticleUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -21,21 +22,15 @@ public class BlockPlaceListener implements Listener {
             BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN
     };
 
-    private static boolean requireAdjacent = true;
-    private static boolean requireSameMob = true;
-    private static int maxCluster = -1;
-
-    public static void setPlacementRules(boolean requireAdjacent, boolean requireSameMob, int maxCluster) {
-        BlockPlaceListener.requireAdjacent = requireAdjacent;
-        BlockPlaceListener.requireSameMob = requireSameMob;
-        BlockPlaceListener.maxCluster = maxCluster;
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         if (!(event.getBlock().getState() instanceof CreatureSpawner attempted)) {
             return;
         }
+
+        boolean requireAdjacent = ConfigManager.isRequireAdjacent();
+        boolean requireSameMob = ConfigManager.isRequireSameMob();
+        int maxCluster = ConfigManager.getMaxCluster();
 
         if (!requireAdjacent && !requireSameMob && maxCluster < 0) {
             return;

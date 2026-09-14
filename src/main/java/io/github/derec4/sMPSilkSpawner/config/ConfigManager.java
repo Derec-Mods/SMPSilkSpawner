@@ -1,14 +1,14 @@
 package io.github.derec4.sMPSilkSpawner.config;
 
-import io.github.derec4.sMPSilkSpawner.listener.BlockBreakListener;
-import io.github.derec4.sMPSilkSpawner.listener.BlockPlaceListener;
-import io.github.derec4.sMPSilkSpawner.util.ExplosionUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ConfigManager {
 
     private static final double DEFAULT_DROP_CHANCE = 0.5;
+    private static final boolean DEFAULT_DROP_AS_ITEM = true;
+    private static final int DEFAULT_DURABILITY_DAMAGE = 1024;
+    private static final double DEFAULT_PLAYER_DAMAGE_PERCENT = 50.0;
 
     private static final double DEFAULT_CHANCE_SMALL = 0.70;
     private static final double DEFAULT_CHANCE_LARGE = 0.40;
@@ -17,11 +17,13 @@ public final class ConfigManager {
     private static final float DEFAULT_POWER_SMALL = 2.0f;
     private static final float DEFAULT_POWER_LARGE = 4.0f;
     private static final float DEFAULT_POWER_MASSIVE = 6.0f;
-    private static final int DEFAULT_DURABILITY_DAMAGE = 1024;
-    private static final double DEFAULT_PLAYER_DAMAGE_PERCENT = 50.0;
+
+    private static final boolean DEFAULT_REQUIRE_ADJACENT = true;
+    private static final boolean DEFAULT_REQUIRE_SAME_MOB = true;
+    private static final int DEFAULT_MAX_CLUSTER = -1;
 
     private static double dropChance = DEFAULT_DROP_CHANCE;
-    private static boolean dropAsItem = true;
+    private static boolean dropAsItem = DEFAULT_DROP_AS_ITEM;
     private static int durabilityDamage = DEFAULT_DURABILITY_DAMAGE;
     private static double playerDamagePercent = DEFAULT_PLAYER_DAMAGE_PERCENT;
 
@@ -33,9 +35,9 @@ public final class ConfigManager {
     private static float powerLarge = DEFAULT_POWER_LARGE;
     private static float powerMassive = DEFAULT_POWER_MASSIVE;
 
-    private static boolean requireAdjacent = true;
-    private static boolean requireSameMob = true;
-    private static int maxCluster = -1;
+    private static boolean requireAdjacent = DEFAULT_REQUIRE_ADJACENT;
+    private static boolean requireSameMob = DEFAULT_REQUIRE_SAME_MOB;
+    private static int maxCluster = DEFAULT_MAX_CLUSTER;
 
     private ConfigManager() {
     }
@@ -47,14 +49,9 @@ public final class ConfigManager {
         FileConfiguration config = plugin.getConfig();
 
         dropChance = clampChance(config.getDouble("break.drop-chance", DEFAULT_DROP_CHANCE), DEFAULT_DROP_CHANCE, plugin, "break.drop-chance");
-        dropAsItem = config.getBoolean("break.drop-as-item", true);
-        BlockBreakListener.setSpawnerDropChance(dropChance);
-        BlockBreakListener.setDropAsItem(dropAsItem);
-
+        dropAsItem = config.getBoolean("break.drop-as-item", DEFAULT_DROP_AS_ITEM);
         durabilityDamage = clampNonNegativeInt(config.getInt("break.durability-damage", DEFAULT_DURABILITY_DAMAGE), DEFAULT_DURABILITY_DAMAGE, plugin, "break.durability-damage");
         playerDamagePercent = clampPercent(config.getDouble("break.player-damage-percent", DEFAULT_PLAYER_DAMAGE_PERCENT), DEFAULT_PLAYER_DAMAGE_PERCENT, plugin, "break.player-damage-percent");
-        BlockBreakListener.setDurabilityDamage(durabilityDamage);
-        BlockBreakListener.setPlayerDamagePercent(playerDamagePercent);
 
         chanceSmall = clampChance(config.getDouble("break.explosions.chance-small", DEFAULT_CHANCE_SMALL), DEFAULT_CHANCE_SMALL, plugin, "break.explosions.chance-small");
         chanceLarge = clampChance(config.getDouble("break.explosions.chance-large", DEFAULT_CHANCE_LARGE), DEFAULT_CHANCE_LARGE, plugin, "break.explosions.chance-large");
@@ -64,14 +61,63 @@ public final class ConfigManager {
         powerLarge = clampPower(config.getDouble("break.explosions.power-large", DEFAULT_POWER_LARGE), DEFAULT_POWER_LARGE, plugin, "break.explosions.power-large");
         powerMassive = clampPower(config.getDouble("break.explosions.power-massive", DEFAULT_POWER_MASSIVE), DEFAULT_POWER_MASSIVE, plugin, "break.explosions.power-massive");
 
-        ExplosionUtils.setExplosionSettings(chanceSmall, chanceLarge, chanceMassive, powerSmall, powerLarge, powerMassive);
-
-        requireAdjacent = config.getBoolean("place.require-adjacent", true);
-        requireSameMob = config.getBoolean("place.require-same-mob", true);
-        maxCluster = clampMaxCluster(config.getInt("place.max-cluster", -1), plugin);
-        BlockPlaceListener.setPlacementRules(requireAdjacent, requireSameMob, maxCluster);
+        requireAdjacent = config.getBoolean("place.require-adjacent", DEFAULT_REQUIRE_ADJACENT);
+        requireSameMob = config.getBoolean("place.require-same-mob", DEFAULT_REQUIRE_SAME_MOB);
+        maxCluster = clampMaxCluster(config.getInt("place.max-cluster", DEFAULT_MAX_CLUSTER), plugin);
 
         plugin.getLogger().info("Loaded config.yml");
+    }
+
+    public static double getDropChance() {
+        return dropChance;
+    }
+
+    public static boolean isDropAsItem() {
+        return dropAsItem;
+    }
+
+    public static int getDurabilityDamage() {
+        return durabilityDamage;
+    }
+
+    public static double getPlayerDamagePercent() {
+        return playerDamagePercent;
+    }
+
+    public static double getChanceSmall() {
+        return chanceSmall;
+    }
+
+    public static double getChanceLarge() {
+        return chanceLarge;
+    }
+
+    public static double getChanceMassive() {
+        return chanceMassive;
+    }
+
+    public static float getPowerSmall() {
+        return powerSmall;
+    }
+
+    public static float getPowerLarge() {
+        return powerLarge;
+    }
+
+    public static float getPowerMassive() {
+        return powerMassive;
+    }
+
+    public static boolean isRequireAdjacent() {
+        return requireAdjacent;
+    }
+
+    public static boolean isRequireSameMob() {
+        return requireSameMob;
+    }
+
+    public static int getMaxCluster() {
+        return maxCluster;
     }
 
     private static double clampChance(double value, double fallback, JavaPlugin plugin, String path) {
@@ -100,8 +146,8 @@ public final class ConfigManager {
 
     private static int clampMaxCluster(int value, JavaPlugin plugin) {
         if (value < -1) {
-            plugin.getLogger().warning("Invalid place.max-cluster (" + value + "); using default -1");
-            return -1;
+            plugin.getLogger().warning("Invalid place.max-cluster (" + value + "); using default " + DEFAULT_MAX_CLUSTER);
+            return DEFAULT_MAX_CLUSTER;
         }
         return value;
     }

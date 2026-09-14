@@ -1,5 +1,6 @@
 package io.github.derec4.sMPSilkSpawner.listener;
 
+import io.github.derec4.sMPSilkSpawner.config.ConfigManager;
 import io.github.derec4.sMPSilkSpawner.util.ExplosionUtils;
 import io.github.derec4.sMPSilkSpawner.util.ItemUtils;
 import org.bukkit.Bukkit;
@@ -35,27 +36,6 @@ import static io.github.derec4.sMPSilkSpawner.util.ItemUtils.checkSilkTouch;
  * @author DerexXD
  */
 public class BlockBreakListener implements Listener {
-
-    private static double spawnerDropChance = 0.5;
-    private static boolean dropAsItem = true;
-    private static int durabilityDamage = 1024;
-    private static double playerDamagePercent = 50.0;
-
-    public static void setSpawnerDropChance(double dropChance) {
-        spawnerDropChance = dropChance;
-    }
-
-    public static void setDropAsItem(boolean dropAsItem) {
-        BlockBreakListener.dropAsItem = dropAsItem;
-    }
-
-    public static void setDurabilityDamage(int durabilityDamage) {
-        BlockBreakListener.durabilityDamage = durabilityDamage;
-    }
-
-    public static void setPlayerDamagePercent(double playerDamagePercent) {
-        BlockBreakListener.playerDamagePercent = playerDamagePercent;
-    }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
@@ -103,14 +83,14 @@ public class BlockBreakListener implements Listener {
         Location location = block.getLocation();
         ExplosionUtils.playExplosion(world, location, ExplosionUtils.rollExplosionSize());
 
-        if (Math.random() >= spawnerDropChance) {
+        if (Math.random() >= ConfigManager.getDropChance()) {
             return;
         }
 
         EntityType entityType = spawner.getSpawnedType();
 
         ItemStack spawnerItem = ItemUtils.newSpawnerItem(entityType, null, 1);
-        if (dropAsItem) {
+        if (ConfigManager.isDropAsItem()) {
             world.dropItemNaturally(location, spawnerItem);
         } else {
             Map<Integer, ItemStack> leftover = player.getInventory().addItem(spawnerItem);
@@ -121,6 +101,7 @@ public class BlockBreakListener implements Listener {
     }
 
     private static void applyDurabilityDamage(ItemStack tool) {
+        int durabilityDamage = ConfigManager.getDurabilityDamage();
         if (durabilityDamage <= 0 || tool.getType().getMaxDurability() <= 0) {
             return;
         }
@@ -141,6 +122,7 @@ public class BlockBreakListener implements Listener {
     }
 
     private static void applyMagicPlayerDamage(Player player) {
+        double playerDamagePercent = ConfigManager.getPlayerDamagePercent();
         if (playerDamagePercent <= 0.0) {
             return;
         }
