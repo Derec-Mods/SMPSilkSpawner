@@ -38,7 +38,7 @@ public class BlockBreakListener implements Listener {
 
     private static double spawnerDropChance = 0.5;
     private static boolean dropAsItem = true;
-    private static int durabilityDamage = 100;
+    private static int durabilityDamage = 1024;
     private static double playerDamagePercent = 50.0;
 
     public static void setSpawnerDropChance(double dropChance) {

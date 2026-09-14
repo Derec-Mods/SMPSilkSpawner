@@ -17,7 +17,7 @@ public final class ConfigManager {
     private static final float DEFAULT_POWER_SMALL = 2.0f;
     private static final float DEFAULT_POWER_LARGE = 4.0f;
     private static final float DEFAULT_POWER_MASSIVE = 6.0f;
-    private static final int DEFAULT_DURABILITY_DAMAGE = 100;
+    private static final int DEFAULT_DURABILITY_DAMAGE = 1024;
     private static final double DEFAULT_PLAYER_DAMAGE_PERCENT = 50.0;
 
     private static double dropChance = DEFAULT_DROP_CHANCE;

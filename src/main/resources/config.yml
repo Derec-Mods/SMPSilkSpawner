@@ -9,7 +9,7 @@ break:
   drop-as-item: true
 
   # Extra durability taken from the pickaxe when mining a spawner. 0 means none
-  durability-damage: 100
+  durability-damage: 1024
 
   # Percent of the player's max health to deal as magic damage. 50 = half. 0 means none
   player-damage-percent: 50
