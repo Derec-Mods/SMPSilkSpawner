@@ -8,6 +8,9 @@ break:
   # If false, it goes straight into the player's inventory (overflow drops on the ground).
   drop-as-item: true
 
+  # Extra durability taken from the pickaxe when mining a spawner. 0 means none
+  durability-damage: 100
+
   explosions:
     # This is how we pick an explosion when a spawner breaks:
     # We roll a random number from 0 to 1. Check massive first, then large, then small.

@@ -15,6 +15,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Map;
 
@@ -31,6 +33,7 @@ public class BlockBreakListener implements Listener {
 
     private static double spawnerDropChance = 0.5;
     private static boolean dropAsItem = true;
+    private static int durabilityDamage = 100;
 
     public static void setSpawnerDropChance(double dropChance) {
         spawnerDropChance = dropChance;
@@ -38,6 +41,10 @@ public class BlockBreakListener implements Listener {
 
     public static void setDropAsItem(boolean dropAsItem) {
         BlockBreakListener.dropAsItem = dropAsItem;
+    }
+
+    public static void setDurabilityDamage(int durabilityDamage) {
+        BlockBreakListener.durabilityDamage = durabilityDamage;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -75,6 +82,8 @@ public class BlockBreakListener implements Listener {
         event.setDropItems(false);
         event.setExpToDrop(0);
 
+        applyDurabilityDamage(tool);
+
         World world = block.getWorld();
         Location location = block.getLocation();
         ExplosionUtils.playExplosion(world, location, ExplosionUtils.rollExplosionSize());
@@ -94,5 +103,25 @@ public class BlockBreakListener implements Listener {
                 world.dropItemNaturally(location, item);
             }
         }
+    }
+
+    private static void applyDurabilityDamage(ItemStack tool) {
+        if (durabilityDamage <= 0 || tool.getType().getMaxDurability() <= 0) {
+            return;
+        }
+
+        ItemMeta meta = tool.getItemMeta();
+        if (!(meta instanceof Damageable damageable)) {
+            return;
+        }
+
+        int newDamage = damageable.getDamage() + durabilityDamage;
+        if (newDamage >= tool.getType().getMaxDurability()) {
+            tool.setAmount(0);
+            return;
+        }
+
+        damageable.setDamage(newDamage);
+        tool.setItemMeta(damageable);
     }
 }

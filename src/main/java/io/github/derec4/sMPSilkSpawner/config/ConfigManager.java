@@ -17,9 +17,11 @@ public final class ConfigManager {
     private static final float DEFAULT_POWER_SMALL = 2.0f;
     private static final float DEFAULT_POWER_LARGE = 4.0f;
     private static final float DEFAULT_POWER_MASSIVE = 6.0f;
+    private static final int DEFAULT_DURABILITY_DAMAGE = 100;
 
     private static double dropChance = DEFAULT_DROP_CHANCE;
     private static boolean dropAsItem = true;
+    private static int durabilityDamage = DEFAULT_DURABILITY_DAMAGE;
 
     private static double chanceSmall = DEFAULT_CHANCE_SMALL;
     private static double chanceLarge = DEFAULT_CHANCE_LARGE;
@@ -47,6 +49,9 @@ public final class ConfigManager {
         BlockBreakListener.setSpawnerDropChance(dropChance);
         BlockBreakListener.setDropAsItem(dropAsItem);
 
+        durabilityDamage = clampNonNegativeInt(config.getInt("break.durability-damage", DEFAULT_DURABILITY_DAMAGE), DEFAULT_DURABILITY_DAMAGE, plugin, "break.durability-damage");
+        BlockBreakListener.setDurabilityDamage(durabilityDamage);
+
         chanceSmall = clampChance(config.getDouble("break.explosions.chance-small", DEFAULT_CHANCE_SMALL), DEFAULT_CHANCE_SMALL, plugin, "break.explosions.chance-small");
         chanceLarge = clampChance(config.getDouble("break.explosions.chance-large", DEFAULT_CHANCE_LARGE), DEFAULT_CHANCE_LARGE, plugin, "break.explosions.chance-large");
         chanceMassive = clampChance(config.getDouble("break.explosions.chance-massive", DEFAULT_CHANCE_MASSIVE), DEFAULT_CHANCE_MASSIVE, plugin, "break.explosions.chance-massive");
@@ -67,6 +72,14 @@ public final class ConfigManager {
 
     private static double clampChance(double value, double fallback, JavaPlugin plugin, String path) {
         if (value < 0.0 || value > 1.0) {
+            plugin.getLogger().warning("Invalid " + path + " (" + value + "); using default " + fallback);
+            return fallback;
+        }
+        return value;
+    }
+
+    private static int clampNonNegativeInt(int value, int fallback, JavaPlugin plugin, String path) {
+        if (value < 0) {
             plugin.getLogger().warning("Invalid " + path + " (" + value + "); using default " + fallback);
             return fallback;
         }
