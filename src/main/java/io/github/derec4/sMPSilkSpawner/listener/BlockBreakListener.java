@@ -34,6 +34,7 @@ public class BlockBreakListener implements Listener {
     private static double spawnerDropChance = 0.5;
     private static boolean dropAsItem = true;
     private static int durabilityDamage = 100;
+    private static double playerDamage = 0.0;
 
     public static void setSpawnerDropChance(double dropChance) {
         spawnerDropChance = dropChance;
@@ -45,6 +46,10 @@ public class BlockBreakListener implements Listener {
 
     public static void setDurabilityDamage(int durabilityDamage) {
         BlockBreakListener.durabilityDamage = durabilityDamage;
+    }
+
+    public static void setPlayerDamage(double playerDamage) {
+        BlockBreakListener.playerDamage = playerDamage;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -83,6 +88,9 @@ public class BlockBreakListener implements Listener {
         event.setExpToDrop(0);
 
         applyDurabilityDamage(tool);
+        if (playerDamage > 0.0) {
+            player.damage(playerDamage);
+        }
 
         World world = block.getWorld();
         Location location = block.getLocation();

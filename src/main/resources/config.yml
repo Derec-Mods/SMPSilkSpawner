@@ -11,6 +11,9 @@ break:
   # Extra durability taken from the pickaxe when mining a spawner. 0 means none
   durability-damage: 100
 
+  # Damage dealt to the player when a spawner breaks (1.0 = half a heart). 0 means none
+  player-damage: 0.0
+
   explosions:
     # This is how we pick an explosion when a spawner breaks:
     # We roll a random number from 0 to 1. Check massive first, then large, then small.
