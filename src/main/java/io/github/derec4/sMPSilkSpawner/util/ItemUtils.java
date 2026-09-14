@@ -18,6 +18,11 @@ public class ItemUtils {
         return item.containsEnchantment(Enchantment.SILK_TOUCH);
     }
 
+    public static boolean checkPickaxe(ItemStack item) {
+        if (item == null) return false;
+        return item.getType().name().endsWith("_PICKAXE");
+    }
+
     /**
      * Generates a new spawner ItemStack with mob type stored in block state (and optional lore).
      * @param entityType The entity type to store (e.g. "PIG", "ZOMBIE").

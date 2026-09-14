@@ -20,6 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Map;
 
+import static io.github.derec4.sMPSilkSpawner.util.ItemUtils.checkPickaxe;
 import static io.github.derec4.sMPSilkSpawner.util.ItemUtils.checkSilkTouch;
 
 /**
@@ -82,6 +83,10 @@ public class BlockBreakListener implements Listener {
             if (!checkSilkTouch(tool)) {
                 return;
             }
+        }
+
+        if (!checkPickaxe(tool)) {
+            return;
         }
 
         event.setDropItems(false);
