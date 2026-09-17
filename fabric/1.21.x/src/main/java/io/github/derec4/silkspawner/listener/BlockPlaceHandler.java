@@ -20,11 +20,7 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 
-public final class BlockPlaceHandler {
-
-    private BlockPlaceHandler() {
-    }
-
+public class BlockPlaceHandler {
     public static boolean shouldCancel(ItemPlacementContext context) {
         if (!context.getStack().isOf(Items.SPAWNER) || context.getPlayer() == null) {
             return false;
@@ -40,9 +36,8 @@ public final class BlockPlaceHandler {
         World world = context.getWorld();
         BlockPos placePos = context.getBlockPos();
         BlockPos againstPos = getAgainstPos(context);
-        boolean againstSpawner = world.getBlockState(againstPos).isOf(Blocks.SPAWNER);
 
-        if (!againstSpawner) {
+        if (!world.getBlockState(againstPos).isOf(Blocks.SPAWNER)) {
             if (requireAdjacent) {
                 ParticleUtils.playFailedParticles(world, placePos);
                 return true;
@@ -70,25 +65,14 @@ public final class BlockPlaceHandler {
         if (context.getWorld().isClient || !context.getStack().isOf(Items.SPAWNER)) {
             return;
         }
-
         BlockPos againstPos = getAgainstPos(context);
         if (context.getWorld().getBlockState(againstPos).isOf(Blocks.SPAWNER)) {
-            context.getWorld().playSound(
-                    null,
-                    context.getBlockPos(),
-                    SoundEvents.BLOCK_SOUL_SAND_PLACE,
-                    SoundCategory.BLOCKS,
-                    1.0f,
-                    1.0f
-            );
+            context.getWorld().playSound(null, context.getBlockPos(), SoundEvents.BLOCK_SOUL_SAND_PLACE, SoundCategory.BLOCKS, 1.0f, 1.0f);
         }
     }
 
     private static BlockPos getAgainstPos(ItemPlacementContext context) {
-        if (context.canReplaceExisting()) {
-            return context.getBlockPos();
-        }
-        return context.getBlockPos().offset(context.getSide().getOpposite());
+        return context.canReplaceExisting() ? context.getBlockPos() : context.getBlockPos().offset(context.getSide().getOpposite());
     }
 
     private static int countConnectedSpawners(World world, BlockPos start) {

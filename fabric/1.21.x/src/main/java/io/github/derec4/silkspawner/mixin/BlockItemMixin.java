@@ -12,21 +12,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockItem.class)
 public class BlockItemMixin {
-
     @Inject(method = "place(Lnet/minecraft/item/ItemPlacementContext;)Lnet/minecraft/util/ActionResult;", at = @At("HEAD"), cancellable = true)
-    private void smpSilkSpawner$restrictSpawnerPlacement(ItemPlacementContext context, CallbackInfoReturnable<ActionResult> cir) {
-        if (!context.getStack().isOf(Items.SPAWNER)) {
-            return;
-        }
-        if (BlockPlaceHandler.shouldCancel(context)) {
+    private void restrictPlace(ItemPlacementContext context, CallbackInfoReturnable<ActionResult> cir) {
+        if (context.getStack().isOf(Items.SPAWNER) && BlockPlaceHandler.shouldCancel(context)) {
             cir.setReturnValue(ActionResult.FAIL);
         }
     }
 
     @Inject(method = "place(Lnet/minecraft/item/ItemPlacementContext;)Lnet/minecraft/util/ActionResult;", at = @At("RETURN"))
-    private void smpSilkSpawner$playSpawnerPlaceSound(ItemPlacementContext context, CallbackInfoReturnable<ActionResult> cir) {
-        ActionResult result = cir.getReturnValue();
-        if (result != null && result.isAccepted()) {
+    private void playPlaceSound(ItemPlacementContext context, CallbackInfoReturnable<ActionResult> cir) {
+        if (cir.getReturnValue() != null && cir.getReturnValue().isAccepted()) {
             BlockPlaceHandler.onPlaced(context);
         }
     }

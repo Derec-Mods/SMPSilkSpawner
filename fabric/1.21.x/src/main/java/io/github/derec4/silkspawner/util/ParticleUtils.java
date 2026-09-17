@@ -7,29 +7,12 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public final class ParticleUtils {
-
-    private ParticleUtils() {
-    }
-
+public class ParticleUtils {
     public static void playFailedParticles(World world, BlockPos pos) {
-        if (world.isClient) {
+        if (!(world instanceof ServerWorld serverWorld)) {
             return;
         }
-
-        world.playSound(null, pos, SoundEvents.BLOCK_SOUL_SAND_HIT, SoundCategory.BLOCKS, 1.0f, 1.0f);
-        if (world instanceof ServerWorld serverWorld) {
-            serverWorld.spawnParticles(
-                    ParticleTypes.SMALL_FLAME,
-                    pos.getX(),
-                    pos.getY(),
-                    pos.getZ(),
-                    5,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0
-            );
-        }
+        serverWorld.playSound(null, pos, SoundEvents.BLOCK_SOUL_SAND_HIT, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        serverWorld.spawnParticles(ParticleTypes.SMALL_FLAME, pos.getX(), pos.getY(), pos.getZ(), 5, 0.0, 0.0, 0.0, 0.0);
     }
 }

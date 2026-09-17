@@ -23,20 +23,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Locale;
 
-public final class ItemUtils {
-
-    private static final String ENTITY_KEY = "entity";
-    private static final String ID_KEY = "id";
-
-    private ItemUtils() {
-    }
-
-    public static boolean hasSilkTouch(ItemStack stack) {
-        if (stack == null || stack.isEmpty()) {
-            return false;
-        }
-
-        for (RegistryEntry<Enchantment> enchantment : stack.getEnchantments().getEnchantments()) {
+public class ItemUtils {
+    public static boolean checkSilkTouch(ItemStack item) {
+        if (item == null || item.isEmpty()) return false;
+        for (RegistryEntry<Enchantment> enchantment : item.getEnchantments().getEnchantments()) {
             if (enchantment.matchesKey(Enchantments.SILK_TOUCH)) {
                 return true;
             }
@@ -44,26 +34,21 @@ public final class ItemUtils {
         return false;
     }
 
-    public static boolean isPickaxe(ItemStack stack) {
-        return stack != null && !stack.isEmpty() && stack.isIn(ItemTags.PICKAXES);
-    }
-
-    public static boolean isSilkTouchPickaxe(ItemStack stack) {
-        return hasSilkTouch(stack) && isPickaxe(stack);
+    public static boolean checkPickaxe(ItemStack item) {
+        if (item == null || item.isEmpty()) return false;
+        return item.isIn(ItemTags.PICKAXES);
     }
 
     public static ItemStack newSpawnerItem(@Nullable EntityType<?> entityType, int amount) {
-        if (amount <= 0) {
-            return ItemStack.EMPTY;
-        }
+        if (amount <= 0) return ItemStack.EMPTY;
 
         ItemStack spawner = new ItemStack(Items.SPAWNER, amount);
         if (entityType != null) {
             NbtCompound nbt = new NbtCompound();
             NbtCompound spawnData = new NbtCompound();
             NbtCompound entity = new NbtCompound();
-            entity.putString(ID_KEY, EntityType.getId(entityType).toString());
-            spawnData.put(ENTITY_KEY, entity);
+            entity.putString("id", EntityType.getId(entityType).toString());
+            spawnData.put("entity", entity);
             nbt.put(MobSpawnerLogic.SPAWN_DATA_KEY, spawnData);
             BlockItem.setBlockEntityData(spawner, BlockEntityType.MOB_SPAWNER, nbt);
             spawner.set(DataComponentTypes.LORE, new LoreComponent(List.of(
@@ -79,27 +64,19 @@ public final class ItemUtils {
 
     public static @Nullable EntityType<?> getSpawnedType(ItemStack stack) {
         NbtComponent component = stack.get(DataComponentTypes.BLOCK_ENTITY_DATA);
-        if (component == null) {
-            return null;
-        }
-        return getSpawnedType(component.copyNbt());
+        return component == null ? null : getSpawnedType(component.copyNbt());
     }
 
     public static @Nullable EntityType<?> getSpawnedType(NbtCompound nbt) {
         if (!nbt.contains(MobSpawnerLogic.SPAWN_DATA_KEY, NbtElement.COMPOUND_TYPE)) {
             return null;
         }
-
         NbtCompound spawnData = nbt.getCompound(MobSpawnerLogic.SPAWN_DATA_KEY);
-        if (!spawnData.contains(ENTITY_KEY, NbtElement.COMPOUND_TYPE)) {
+        if (!spawnData.contains("entity", NbtElement.COMPOUND_TYPE)) {
             return null;
         }
-
-        String id = spawnData.getCompound(ENTITY_KEY).getString(ID_KEY);
-        if (id == null || id.isEmpty()) {
-            return null;
-        }
-        return EntityType.get(id).orElse(null);
+        String id = spawnData.getCompound("entity").getString("id");
+        return id == null || id.isEmpty() ? null : EntityType.get(id).orElse(null);
     }
 
     private static String formatMobName(EntityType<?> entityType) {

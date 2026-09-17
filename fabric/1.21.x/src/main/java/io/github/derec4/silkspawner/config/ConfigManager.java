@@ -169,7 +169,6 @@ public final class ConfigManager {
                 return object.get(key).getAsDouble();
             }
         } catch (Exception ignored) {
-            // fall through to default
         }
         return fallback;
     }
@@ -180,7 +179,6 @@ public final class ConfigManager {
                 return object.get(key).getAsInt();
             }
         } catch (Exception ignored) {
-            // fall through to default
         }
         return fallback;
     }
@@ -191,7 +189,6 @@ public final class ConfigManager {
                 return object.get(key).getAsBoolean();
             }
         } catch (Exception ignored) {
-            // fall through to default
         }
         return fallback;
     }

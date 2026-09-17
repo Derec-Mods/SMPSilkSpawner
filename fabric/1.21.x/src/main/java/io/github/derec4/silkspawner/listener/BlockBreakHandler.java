@@ -16,10 +16,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public final class BlockBreakHandler {
+import static io.github.derec4.silkspawner.util.ItemUtils.checkPickaxe;
+import static io.github.derec4.silkspawner.util.ItemUtils.checkSilkTouch;
 
-    private BlockBreakHandler() {
-    }
+public class BlockBreakHandler {
+    public static boolean skipXp;
 
     public static void register() {
         PlayerBlockBreakEvents.AFTER.register(BlockBreakHandler::onBlockBreak);
@@ -36,12 +37,18 @@ public final class BlockBreakHandler {
             return;
         }
 
-        ItemStack tool = findSilkTouchPickaxe(player);
-        if (tool == null) {
+        ItemStack tool = player.getMainHandStack();
+        if (!checkSilkTouch(tool)) {
+            tool = player.getOffHandStack();
+            if (!checkSilkTouch(tool)) {
+                return;
+            }
+        }
+        if (!checkPickaxe(tool)) {
             return;
         }
 
-        SilkBreakContext.setSkipXp(true);
+        skipXp = true;
         applyDurabilityDamage(tool);
         applyMagicPlayerDamage(world, player);
         ExplosionUtils.playExplosion(world, pos, ExplosionUtils.rollExplosionSize());
@@ -57,19 +64,6 @@ public final class BlockBreakHandler {
         } else if (!player.getInventory().insertStack(spawnerItem) && !spawnerItem.isEmpty()) {
             Block.dropStack(world, pos, spawnerItem);
         }
-    }
-
-    private static @Nullable ItemStack findSilkTouchPickaxe(PlayerEntity player) {
-        ItemStack mainHand = player.getMainHandStack();
-        if (ItemUtils.isSilkTouchPickaxe(mainHand)) {
-            return mainHand;
-        }
-
-        ItemStack offHand = player.getOffHandStack();
-        if (ItemUtils.isSilkTouchPickaxe(offHand)) {
-            return offHand;
-        }
-        return null;
     }
 
     private static void applyDurabilityDamage(ItemStack tool) {
