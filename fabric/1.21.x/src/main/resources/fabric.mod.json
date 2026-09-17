@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "smp_silk_spawner",
+  "version": "${version}",
+  "name": "SMP Silk Spawner",
+  "description": "Balanced, configurable, vanilla friendly silk spawner plugin port",
+  "authors": [
+    "DerexXD"
+  ],
+  "contact": {
+    "homepage": "https://derec4.github.io/derexsmp/z"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.derec4.silkspawner.SMPSilkSpawner"
+    ]
+  },
+  "mixins": [
+    "smp_silk_spawner.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version_range}"
+  }
+}

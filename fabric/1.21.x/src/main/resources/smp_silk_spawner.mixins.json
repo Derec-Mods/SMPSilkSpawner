@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "io.github.derec4.silkspawner.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BlockItemMixin",
+    "MobSpawnerBlockEntityMixin",
+    "SpawnerBlockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

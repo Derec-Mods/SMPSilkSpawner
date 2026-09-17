@@ -1,0 +1,31 @@
+{
+  "_comments": {
+    "drop-chance": "Chance (0.0 - 1.0) to drop the spawner when mined with silk touch",
+    "drop-as-item": "If true, the spawner drops on the ground. If false, it goes into the player's inventory",
+    "durability-damage": "Extra durability taken from the pickaxe when mining a spawner. 0 means none",
+    "player-damage-percent": "Percent of the player's max health to deal as magic damage. 50 = half. 0 means none",
+    "explosions": "Roll 0 to 1, then check massive, large, then small. Defaults: 10% massive, 30% large, 30% small, 30% none",
+    "require-adjacent": "If true, spawners can only be placed against another spawner",
+    "require-same-mob": "If true, the placed spawner must match the mob type of the spawner it is placed against",
+    "max-cluster": "Max number of spawners in one connected group. -1 means no limit"
+  },
+  "break": {
+    "drop-chance": 0.5,
+    "drop-as-item": true,
+    "durability-damage": 1024,
+    "player-damage-percent": 50,
+    "explosions": {
+      "chance-small": 0.70,
+      "chance-large": 0.40,
+      "chance-massive": 0.10,
+      "power-small": 2.0,
+      "power-large": 4.0,
+      "power-massive": 6.0
+    }
+  },
+  "place": {
+    "require-adjacent": true,
+    "require-same-mob": true,
+    "max-cluster": -1
+  }
+}
