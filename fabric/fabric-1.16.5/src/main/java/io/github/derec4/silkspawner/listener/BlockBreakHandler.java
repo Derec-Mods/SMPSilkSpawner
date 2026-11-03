@@ -23,7 +23,8 @@ public class BlockBreakHandler {
         PlayerBlockBreakEvents.AFTER.register(BlockBreakHandler::onBlockBreak);
     }
 
-    private static void onBlockBreak(Level level, Player player, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+    private static void onBlockBreak(Level level, Player player, BlockPos pos, BlockState state,
+            BlockEntity blockEntity) {
         if (level.isClientSide() || !state.is(Blocks.SPAWNER)) {
             return;
         }
@@ -75,4 +76,3 @@ public class BlockBreakHandler {
         }
     }
 }
-

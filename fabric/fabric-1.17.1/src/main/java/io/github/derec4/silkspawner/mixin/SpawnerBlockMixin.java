@@ -14,11 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(SpawnerBlock.class)
 public class SpawnerBlockMixin {
     @Inject(method = "spawnAfterBreak", at = @At("HEAD"), cancellable = true)
-    private void skipXp(BlockState state, ServerLevel level, BlockPos pos, ItemStack tool, boolean dropExperience, CallbackInfo ci) {
+    private void skipXp(BlockState state, ServerLevel level, BlockPos pos, ItemStack tool, CallbackInfo ci) {
         if (BlockBreakHandler.skipXp) {
             BlockBreakHandler.skipXp = false;
             ci.cancel();
         }
     }
 }
-
