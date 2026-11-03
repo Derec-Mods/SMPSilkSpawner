@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.92'
+    id 'net.neoforged.moddev' version '2.0.148'
     id 'idea'
 }
 
@@ -22,7 +22,11 @@ repositories {
 }
 
 base {
-    archivesName = mod_id
+    archivesName = project.archives_base_name
+}
+
+tasks.withType(AbstractArchiveTask).configureEach {
+    archiveVersion.set("${project.mod_version}-${project.minecraft_version}-${project.modloader}")
 }
 
 // Mojang ships Java 21 to end users starting in 1.20.5, so mods should target Java 21.
@@ -112,6 +116,26 @@ configurations {
 }
 
 dependencies {
+    components {
+        withModule('net.neoforged:neoforge') {
+            allVariants {
+                withCapabilities {
+                    addCapability('net.neoforged', 'neoforge-moddev-bundle', id.version)
+                    addCapability('net.neoforged', 'neoforge-dependencies', id.version)
+                }
+            }
+        }
+        ['com.mojang:authlib', 'com.mojang:datafixerupper', 'com.mojang:logging', 'com.mojang:text2speech', 'net.neoforged:coremods'].each { mod ->
+            withModule(mod) {
+                addVariant('sourcesElements', 'runtimeElements') {
+                    attributes {
+                        attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
+                        attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, DocsType.SOURCES))
+                    }
+                }
+            }
+        }
+    }
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"

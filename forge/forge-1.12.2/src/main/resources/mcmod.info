@@ -1,12 +1,12 @@
 [
   {
-    "modid": "golden_dandelion",
-    "name": "Golden Dandelion",
-    "description": "Backports the newly added Golden Dandelion, a flower that permanently pauses the aging of baby mobs when fed to them.",
-    "version": "1.0.6.3",
+    "modid": "smp_silk_spawner",
+    "name": "SMP Silk Spawner",
+    "description": "Balanced, configurable, vanilla friendly silk spawner mod",
+    "version": "${version}",
     "credits": "",
     "logoFile": "",
-    "mcversion": "1.12.2",
+    "mcversion": "${mcversion}",
     "url": "https://www.derekchen.dev/",
     "updateUrl": "",
     "authorList": [

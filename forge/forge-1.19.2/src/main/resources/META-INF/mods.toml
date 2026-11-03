@@ -3,15 +3,25 @@ loaderVersion="[43,)"
 license="MIT"
 
 [[mods]]
-modId="tutorialmod"
-version="1.0"
-displayName="Tutorial Mod"
-#updateJSONURL="https://change.me.example.invalid/updates.json"
-#displayURL="https://change.me.to.your.mods.homepage.example.invalid/"
+modId="smp_silk_spawner"
+version="${file.jarVersion}"
+displayName="SMP Silk Spawner"
 displayURL="https://www.derekchen.dev/"
-logoFile="examplemod.png"
-credits="Me"
 authors="DerexXD"
 description='''
-A 1.19 Forge Modding Tutorial.
+Balanced, configurable, vanilla friendly silk spawner mod
 '''
+
+[[dependencies.smp_silk_spawner]]
+    modId="forge"
+    mandatory=true
+    versionRange="[43,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.smp_silk_spawner]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.2,1.20)"
+    ordering="NONE"
+    side="BOTH"

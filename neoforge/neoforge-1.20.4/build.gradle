@@ -31,7 +31,11 @@ repositories {
 }
 
 base {
-    archivesName = mod_id
+    archivesName = project.archives_base_name
+}
+
+tasks.withType(AbstractArchiveTask).configureEach {
+    archiveVersion.set("${project.mod_version}-${project.minecraft_version}-${project.modloader}")
 }
 
 // Mojang ships Java 17 to end users in 1.20.4, so mods should target Java 17.

@@ -11,9 +11,9 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
-version = '1.0.6.3'
-group = 'net.derexxd.goldendandelion'
-archivesBaseName = 'golden_dandelion'
+version = "${project.mod_version}-${project.minecraft_version}-${project.modloader}"
+group = 'io.github.derec4'
+archivesBaseName = project.archives_base_name
 
 sourceCompatibility = targetCompatibility = '1.8'
 compileJava {
@@ -21,7 +21,6 @@ compileJava {
 	options.encoding = 'UTF-8'
 }
 
-// FG 3 puts classes and resources in separate dirs; Forge 1.12 dev expects them together.
 sourceSets {
 	main {
 		output.resourcesDir = output.classesDir
@@ -52,8 +51,17 @@ dependencies {
 }
 
 jar {
-	// Dev-only workaround for ForgeGradle injecting Side.BUKKIT; must not ship in the mod jar.
 	exclude 'net/minecraftforge/fml/relauncher/Side.class'
+}
+
+tasks.withType(AbstractArchiveTask).configureEach {
+    if (delegate.hasProperty('archiveBaseName') && delegate.archiveBaseName != null) {
+        archiveBaseName.set(project.archives_base_name)
+        archiveVersion.set("${project.mod_version}-${project.minecraft_version}-${project.modloader}")
+    } else {
+        baseName = project.archives_base_name
+        version = "${project.mod_version}-${project.minecraft_version}-${project.modloader}"
+    }
 }
 
 processResources {

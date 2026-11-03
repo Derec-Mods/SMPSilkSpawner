@@ -1,26 +1,25 @@
 modLoader="javafml"
 loaderVersion="[36,)"
-license="Apache License v2"
+license="MIT"
 
 [[mods]]
-modId="xmod"
+modId="smp_silk_spawner"
 version="${file.jarVersion}"
-displayName="X Mod"
+displayName="SMP Silk Spawner"
 displayURL="https://www.derekchen.dev/"
-credits="Thanks for this mod goes to Java, Minecraft and Forge"
 authors="DerexXD"
 description='''
-A blank Mod that can be the foundation of others.
+Balanced, configurable, vanilla friendly silk spawner mod
 '''
 
-[[dependencies.xmod]]
+[[dependencies.smp_silk_spawner]]
     modId="forge"
     mandatory=true
     versionRange="[36,)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.xmod]]
+[[dependencies.smp_silk_spawner]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.16.5,1.17)"

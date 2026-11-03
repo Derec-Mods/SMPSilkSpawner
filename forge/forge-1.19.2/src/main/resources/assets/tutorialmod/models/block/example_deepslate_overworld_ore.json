@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "tutorialmod:blocks/example_deepslate_overworld_ore"
-  }
-}
