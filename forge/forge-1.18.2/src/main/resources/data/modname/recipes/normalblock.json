@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NNN",
+    "N N",
+    "NNN"
+  ],
+  "key": {
+    "N": {
+      "item": "modname:normalitem"
+    }
+  },
+  "result": {
+    "item": "modname:normalblock",
+    "count": 1
+  }
+}

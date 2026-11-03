@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "modname:block/normalblock"
+    }
+  }
+}
