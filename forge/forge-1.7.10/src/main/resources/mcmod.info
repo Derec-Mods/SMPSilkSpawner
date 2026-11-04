@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "${modId}",
+    "name": "${modName}",
+    "description": "Balanced, configurable, vanilla friendly silk spawner mod",
+    "version": "${modVersion}",
+    "mcversion": "${minecraftVersion}",
+    "url": "https://www.derekchen.dev/",
+    "updateUrl": "",
+    "authorList": [
+      "DerexXD"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

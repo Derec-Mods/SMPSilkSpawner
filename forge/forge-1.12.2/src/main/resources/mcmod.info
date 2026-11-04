@@ -1,0 +1,20 @@
+[
+  {
+    "modid": "smp_silk_spawner",
+    "name": "SMP Silk Spawner",
+    "description": "Balanced, configurable, vanilla friendly silk spawner mod",
+    "version": "${version}",
+    "credits": "",
+    "logoFile": "",
+    "mcversion": "${mcversion}",
+    "url": "https://www.derekchen.dev/",
+    "updateUrl": "",
+    "authorList": [
+      "DerexXD"
+    ],
+    "dependencies": [],
+    "dependants": [],
+    "requiredMods": [],
+    "useDependencyInformation": "true"
+  }
+]

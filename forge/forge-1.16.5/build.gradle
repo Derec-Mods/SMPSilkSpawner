@@ -1,0 +1,97 @@
+buildscript {
+    repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+    }
+}
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+
+version = "${project.mod_version}-${project.minecraft_version}-${project.modloader}"
+group = 'io.github.derec4'
+archivesBaseName = project.archives_base_name
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+
+minecraft {
+    mappings channel: 'snapshot', version: '20201028-1.16.3'
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                smp_silk_spawner {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                smp_silk_spawner {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            args '--mod', 'smp_silk_spawner', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            mods {
+                smp_silk_spawner {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.16.5-36.0.46'
+}
+
+jar {
+    manifest {
+        attributes([
+            "Specification-Title": "smp_silk_spawner",
+            "Specification-Vendor": "smp_silk_spawner",
+            "Specification-Version": "1",
+            "Implementation-Title": project.name,
+            "Implementation-Version": "${version}",
+            "Implementation-Vendor" :"smp_silk_spawner",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar')
+
+if (project.hasProperty('base')) {
+    try {
+        base.archivesName.set(project.archives_base_name)
+    } catch (Throwable ignored) {
+    }
+}
+
+tasks.withType(AbstractArchiveTask).configureEach {
+    if (delegate.hasProperty('archiveVersion')) {
+        archiveVersion.set("${project.mod_version}-${project.minecraft_version}-${project.modloader}")
+    }
+    if (delegate.hasProperty('archiveBaseName')) {
+        archiveBaseName.set(project.archives_base_name)
+    }
+}

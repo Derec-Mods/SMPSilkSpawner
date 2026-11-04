@@ -1,0 +1,28 @@
+modLoader="javafml"
+loaderVersion="[40,)"
+license="MIT"
+
+[[mods]]
+modId="smp_silk_spawner"
+version="${file.jarVersion}"
+displayName="SMP Silk Spawner"
+displayURL="https://www.derekchen.dev/"
+logoFile="modlogo.png"
+authors="DerexXD"
+description='''
+Balanced, configurable, vanilla friendly silk spawner mod
+'''
+
+[[dependencies.smp_silk_spawner]]
+    modId="forge"
+    mandatory=true
+    versionRange="[40,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.smp_silk_spawner]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18.2,1.19)"
+    ordering="NONE"
+    side="BOTH"

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "smp_silk_spawner",
+  "version": "${version}",
+  "name": "SMP Silk Spawner",
+  "description": "Balanced, configurable, vanilla friendly silk spawner mod",
+  "authors": [
+    "DerexXD"
+  ],
+  "contact": {
+    "homepage": "https://www.derekchen.dev/"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.derec4.silkspawner.SMPSilkSpawner"
+    ]
+  },
+  "mixins": [
+    "smp_silk_spawner.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "fabric-api": "*"
+  }
+}

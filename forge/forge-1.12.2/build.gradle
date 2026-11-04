@@ -1,0 +1,86 @@
+buildscript {
+	repositories {
+		maven { url = 'https://files.minecraftforge.net/maven' }
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:3.0.194'
+	}
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+
+version = "${project.mod_version}-${project.minecraft_version}-${project.modloader}"
+group = 'io.github.derec4'
+archivesBaseName = project.archives_base_name
+
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava {
+	sourceCompatibility = targetCompatibility = '1.8'
+	options.encoding = 'UTF-8'
+}
+
+sourceSets {
+	main {
+		output.resourcesDir = output.classesDir
+	}
+}
+
+minecraft {
+	mappings channel: 'snapshot', version: '20171003-1.12'
+
+	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+	runs {
+		client {
+			workingDirectory project.file('run')
+			property 'forge.logging.markers', 'REGISTRIES'
+			property 'forge.logging.console.level', 'debug'
+		}
+		server {
+			workingDirectory project.file('run')
+			property 'forge.logging.markers', 'REGISTRIES'
+			property 'forge.logging.console.level', 'debug'
+		}
+	}
+}
+
+dependencies {
+	minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
+}
+
+jar {
+	exclude 'net/minecraftforge/fml/relauncher/Side.class'
+}
+
+tasks.withType(AbstractArchiveTask).configureEach {
+    if (delegate.hasProperty('archiveBaseName') && delegate.archiveBaseName != null) {
+        archiveBaseName.set(project.archives_base_name)
+        archiveVersion.set("${project.mod_version}-${project.minecraft_version}-${project.modloader}")
+    } else {
+        baseName = project.archives_base_name
+        version = "${project.mod_version}-${project.minecraft_version}-${project.modloader}"
+    }
+}
+
+processResources {
+	inputs.property 'version', project.version
+	inputs.property 'mcversion', '1.12.2'
+	duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+	from(sourceSets.main.resources.srcDirs) {
+		include 'mcmod.info'
+		expand 'version': project.version, 'mcversion': '1.12.2'
+	}
+
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'mcmod.info'
+	}
+}
+
+tasks.whenTaskAdded { task ->
+	if (task.name == 'runClient' || task.name == 'runServer') {
+		task.dependsOn 'classes'
+	}
+}
